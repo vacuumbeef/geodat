@@ -1,11 +1,12 @@
 # Роутинг
 ## v2rayng, Exclave
-#### Geodat файлы добавлять под названием geoip.dat/geofile.dat, чтобы они заменили собой дефолтные:
+__Geodat файлы добавлять под названием geoip.dat/geofile.dat, чтобы они заменили собой дефолтные:__
   - geoip.dat - <https://github.com/vacuumbeef/geodat/releases/latest/download/geoip.dat>
   - geosite.dat - <https://github.com/vacuumbeef/geodat/releases/latest/download/geosite.dat>
 
-### Доменная стратегия: IPIfNonMatch
-#### Роутинг:
+__Доменная стратегия: IPIfNonMatch__
+
+__Роутинг:__
 ```
 [{"enabled":true,"ip":["geoip:custom-blocked"],"locked":false,"outboundTag":"proxy","remarks":"Заблокированные IP в прокси"},{"domain":["geosite:custom-blocked"],"enabled":true,"locked":false,"outboundTag":"proxy","remarks":"Заблокированные сайты в прокси"},{"enabled":true,"locked":false,"outboundTag":"direct","port":"0-65535","remarks":"Остальное напрямую"},{"enabled":false,"locked":false,"outboundTag":"proxy","port":"0-65535","remarks":"Остальное в прокси"}]
 ```
