@@ -1,0 +1,119 @@
+name: Build geodat files
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '10 3 * * *'
+  push:
+    branches: [main]
+    paths-ignore:
+      - "README.md"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      CURL: "curl -fsSL --retry 3 --retry-delay 2 --retry-connrefused"
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: download build tools
+        run: |
+          ${{ env.CURL }} -o geoip-bin https://github.com/vacuumbeef/geodat-build-tools/releases/latest/download/geoip-bin
+          ${{ env.CURL }} -o geosite-bin https://github.com/vacuumbeef/geodat-build-tools/releases/latest/download/geosite-bin
+
+          chmod +x geoip-bin geosite-bin
+
+      - name: Download and merge lists
+        run: |
+          # Download lists
+          git clone --depth 1 https://github.com/itdoginfo/allow-domains.git itdog-repo
+
+          # merge IPs lists into one
+          for f in itdog-repo/Subnets/IPv4/*.lst; do
+            cat "$f" | tee -a raw_blocked_ips.txt >/dev/null
+            sed -i -e '$a\' raw_blocked_ips.txt
+          done
+
+          if [ -f configs/custom-ip-list.txt ]; then
+            sed -i -e '$a\' configs/custom-ip-list.txt
+            cat configs/custom-ip-list.txt >> raw_blocked_ips.txt
+          fi
+
+          sort -u raw_blocked_ips.txt -o blocked-ips.txt
+
+          rm -f raw_blocked_ips.txt
+
+          # merge domains lists into one
+          
+          mkdir -p data
+          for f in itdog-repo/Categories/*.lst itdog-repo/Services/*.lst itdog-repo/Russia/inside-raw.lst; do
+            cat "$f" | tee -a data/raw_blocked_domains >/dev/null
+            sed -i -e '$a\' data/raw_blocked_domains
+          done
+
+          if [ -f configs/custom-domain-list.txt ]; then
+            sed -i -e '$a\' configs/custom-domain-list.txt
+            cat configs/custom-domain-list.txt >> data/raw_blocked_domains
+          fi
+
+          sort -u data/raw_blocked_domains -o data/custom-blocked
+
+          rm -f data/raw_blocked_domains
+
+      - name: Build geoip
+        run: |
+          ./geoip-bin convert -c configs/config.json
+          mv output/dat/geoip.dat ./geoip.dat
+
+      - name: Build geosite
+        run: |
+          ./geosite-bin --outputdir=./out
+          mv out/dlc.dat ./geosite.dat
+
+      - name: Build geoip-whitelist.dat
+        run: |
+          ${{ env.CURL }} -o wl-ip-1.txt https://github.com/hydraponique/roscomvpn-geoip/raw/refs/heads/master/release/text/whitelist.txt
+
+          ${{ env.CURL }} -o wl-ip-2.txt https://github.com/hydraponique/roscomvpn-geoip/raw/refs/heads/master/release/text/direct.txt
+
+          sed -i -e '$a\' wl-ip-1.txt
+          sed -i -e '$a\' wl-ip-2.txt
+          cat wl-ip-1.txt wl-ip-2.txt | sort -u > ip-whitelist.txt
+          sed -i -e '$a\' ip-whitelist.txt
+          rm -f wl-ip-1.txt
+          rm -f wl-ip-2.txt
+
+          ./geoip-bin convert -c configs/config-whitelist.json
+          mv output/dat/geoip.dat ./geoip-whitelist.dat
+
+          rm -f ip-whitelist
+          rm -f geoip-bin
+
+      - name: Build geosite-whitelist.dat
+        run: |
+          git clone --depth 1 https://github.com/hydraponique/roscomvpn-geosite temp_whitelist
+          sed -i -e '$a\' temp_whitelist/data/category-ru
+          sed -i -e '$a\' temp_whitelist/data/whitelist
+          cat temp_whitelist/data/category-ru temp_whitelist/data/whitelist | sed 's/domain://g' | sort -u > data/whitelist
+          sed -i -e '$a\' data/whitelist
+
+          rm -rf temp_whitelist
+
+          ./geosite-bin --outputdir=./out-full
+          mv out-full/dlc.dat ./geosite-whitelist.dat
+
+      - name: Generate Tag
+        id: tag
+        run: echo "tag=$(date +%Y%m%d%H%M)" >> $GITHUB_OUTPUT
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: Release
+          name: "Latest geodat files"
+          files: |
+            *.dat
