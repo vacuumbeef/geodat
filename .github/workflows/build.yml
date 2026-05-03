@@ -100,6 +100,7 @@ jobs:
           sed -i -e '$a\' temp_whitelist/data/whitelist
           cat temp_whitelist/data/category-ru temp_whitelist/data/whitelist | sed 's/domain://g' | sort -u > data/whitelist
           sed -i -e '$a\' data/whitelist
+          mv data/whitelist data/custom-whitelist
 
           rm -rf temp_whitelist
 
