@@ -1,4 +1,4 @@
-# Роутинг
+# Роутинг "Проксировать только заблокированное"
 ## v2rayng, Exclave
 __Geodat файлы добавлять под названием geoip.dat/geofile.dat, чтобы они заменили собой дефолтные:__
   - geoip.dat - <https://github.com/vacuumbeef/geodat/releases/latest/download/geoip.dat>
