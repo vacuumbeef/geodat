@@ -110,6 +110,10 @@ jobs:
       - name: Build shadowrocket list
         run: |
           ls -l data
+          cp data/custom-blocked sr-blocked.list
+          sed -i -e 's/^/DOMAIN-SUFFIX,/' sr-blocked.list
+          sed -i -e 's/^/IP-CIDR,/' blocked-ips.txt
+          cat blocked-ips.txt | tee -a sr-blocked.list
 
       - name: Generate Tag
         id: tag
@@ -122,3 +126,4 @@ jobs:
           name: "Latest geodat files"
           files: |
             *.dat
+            sr-blocked.list
