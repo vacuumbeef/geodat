@@ -118,28 +118,21 @@ jobs:
 
           cat temp-ips.txt >> sr-blocked.list
 
-          # Compile list of blocked resources (proxy) + russian resources (direct)
-
-          # proxy list
-          sed -e 's/$/,PROXY/' sr-blocked.list > tmp-sr-blocked-whitelist.list
+          # Compile list of ru resources
 
           # whitelist
           # domains
-          sed -e 's/[[:blank:]]//g' -e '/^$/d' -e '/^#/d' data/custom-whitelist > sr-blocked-whitelist.list
-          sed -i 's/^/DOMAIN-SUFFIX,/' sr-blocked-whitelist.list
+          sed -e 's/[[:blank:]]//g' -e '/^$/d' -e '/^#/d' data/custom-whitelist > sr-whitelist.list
+          sed -i 's/^/DOMAIN-SUFFIX,/' sr-whitelist.list
           # ips
           sed -i 's/[[:blank:]]//g; /^$/d; /^#/d'  ip-whitelist.txt 
           sed -i 's/^/IP-CIDR,/' ip-whitelist.txt
 
           ## merge ips and domains
-          cat ip-whitelist.txt >> sr-blocked-whitelist.list
-          sed -i 's/$/,DIRECT/' sr-blocked-whitelist.list
-
-          # merge blocked+whitelist lists
-          cat tmp-sr-blocked-whitelist.list >> sr-blocked-whitelist.list
+          cat ip-whitelist.txt >> sr-whitelist.list
+          mv sr-whitelist.list sr-ru.list
 
           rm temp-ips.txt
-          rm tmp-sr-blocked-whitelist.list
           
           
 
@@ -157,4 +150,4 @@ jobs:
           files: |
             *.dat
             sr-blocked.list
-            sr-blocked-whitelist.list
+            sr-ru.list
