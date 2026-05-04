@@ -128,7 +128,7 @@ jobs:
           sed -e 's/[[:blank:]]//g' -e '/^$/d' data/custom-whitelist > sr-blocked-whitelist.list
           sed -i 's/^/DOMAIN-SUFFIX,/' sr-blocked-whitelist.list
           # ips
-          sed -i 's/[[:blank:]]//g' -i '/^$/d' ip-whitelist.txt 
+          sed -i 's/[[:blank:]]//g; /^$/d'  ip-whitelist.txt 
           sed -i 's/^/IP-CIDR,/' ip-whitelist.txt
 
           ## merge ips and domains
