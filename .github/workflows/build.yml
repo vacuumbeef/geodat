@@ -121,7 +121,7 @@ jobs:
           # Compile list of blocked resources (proxy) + russian resources (direct)
 
           # proxy list
-          sed -e 's/$/,PROXY/' temp-ips.txt > tmp-sr-blocked-whitelist.list
+          sed -e 's/$/,PROXY/' sr-blocked.list > tmp-sr-blocked-whitelist.list
 
           # whitelist
           # domains
