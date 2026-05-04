@@ -18,6 +18,7 @@ happ://routing/add/eyJibG9ja2lwIjpbXSwiYmxvY2tzaXRlcyI6W10sImRpcmVjdGlwIjpbIjEwL
 
 
 # Роутинг c РУ ip/доменами
+_Для правил типа "Проксировать всё, кроме РФ"_
 ## v2rayng, Exclave
   - geoip.dat - <https://github.com/vacuumbeef/geodat/releases/latest/download/geoip-whitelist.dat>
   - geosite.dat - <https://github.com/vacuumbeef/geodat/releases/latest/download/geosite-whitelist.dat>
