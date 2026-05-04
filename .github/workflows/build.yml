@@ -109,12 +109,16 @@ jobs:
 
       - name: Build shadowrocket list
         run: |
-          ls -l data
-          cp data/custom-blocked sr-blocked.list
-          sed -i -e 's/^/DOMAIN-SUFFIX,/' sr-blocked.list
-          sed -i -e 's/^/IP-CIDR,/' blocked-ips.txt
-          cat blocked-ips.txt | tee -a sr-blocked.list
-          sed -i '/^[[:space:]]*$/d' sr-blocked.list
+          sed -e 's/[[:blank:]]//g' -e '/^$/d' data/custom-blocked > sr-blocked.list
+          sed -i 's/^/DOMAIN-SUFFIX,/' sr-blocked.list
+
+          sed -e 's/[[:blank:]]//g' -e '/^$/d' blocked-ips.txt > temp-ips.txt
+          sed -i 's/^/IP-CIDR,/' temp-ips.txt
+
+          cat temp-ips.txt >> sr-blocked.list
+          rm temp-ips.txt
+
+          
 
       - name: Generate Tag
         id: tag
