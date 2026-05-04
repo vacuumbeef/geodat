@@ -107,6 +107,10 @@ jobs:
           ./geosite-bin --outputdir=./out-full
           mv out-full/dlc.dat ./geosite-whitelist.dat
 
+      - name: Build shadowrocket list
+        run: |
+          ls -l
+
       - name: Generate Tag
         id: tag
         run: echo "tag=$(date +%Y%m%d%H%M)" >> $GITHUB_OUTPUT
