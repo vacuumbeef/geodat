@@ -111,6 +111,8 @@ jobs:
         run: |
           ls -l data
           cp data/custom-blocked sr-blocked.list
+          awk 'NF' sr-blocked
+          awk 'NF' blocked-ips.txt
           sed -i -e 's/^/DOMAIN-SUFFIX,/' sr-blocked.list
           sed -i -e 's/^/IP-CIDR,/' blocked-ips.txt
           cat blocked-ips.txt | tee -a sr-blocked.list
