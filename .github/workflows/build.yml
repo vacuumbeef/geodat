@@ -109,6 +109,7 @@ jobs:
 
       - name: Build shadowrocket list
         run: |
+          # Compile regular list of blocked resources
           sed -e 's/[[:blank:]]//g' -e '/^$/d' data/custom-blocked > sr-blocked.list
           sed -i 's/^/DOMAIN-SUFFIX,/' sr-blocked.list
 
@@ -116,7 +117,31 @@ jobs:
           sed -i 's/^/IP-CIDR,/' temp-ips.txt
 
           cat temp-ips.txt >> sr-blocked.list
+
+          # Compile list of blocked resources (proxy) + russian resources (direct)
+
+          # proxy list
+          sed -e 's/$/,PROXY/' temp-ips.txt > tmp-sr-blocked-whitelist.list
+
+          # whitelist
+          # domains
+          sed -e 's/[[:blank:]]//g' -e '/^$/d' data/custom-whitelist > sr-blocked-whitelist.list
+          sed -i 's/^/DOMAIN-SUFFIX,/' sr-blocked-whitelist.list
+          # ips
+          sed -i 's/[[:blank:]]//g' -i '/^$/d' ip-whitelist.txt 
+          sed -i 's/^/IP-CIDR,/' ip-whitelist.txt
+
+          ## merge ips and domains
+          cat ip-whitelist.txt >> sr-blocked-whitelist.list
+          sed -i 's/$/,DIRECT/' sr-blocked-whitelist.list
+
+          # merge blocked+whitelist lists
+          cat tmp-sr-blocked-whitelist.list >> sr-blocked-whitelist.list
+
           rm temp-ips.txt
+          rm tmp-sr-blocked-whitelist.list
+          
+          
 
           
 
@@ -132,3 +157,4 @@ jobs:
           files: |
             *.dat
             sr-blocked.list
+            sr-blocked-whitelist.list
