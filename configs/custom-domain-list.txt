@@ -2,4 +2,5 @@ postmarketos.org
 layer8.space
 alternativeto.net
 soc.nym.se
-release-assets.githubusercontent.com
+githubusercontent.com
+floorplanner.com
