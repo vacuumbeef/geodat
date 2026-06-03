@@ -17,3 +17,4 @@ redlib.cow.rip
 redlib.perennialte.ch
 redlib.privadency.com
 forum.kicad.info
+theverge.com
