@@ -19,3 +19,4 @@ redlib.privadency.com
 forum.kicad.info
 theverge.com
 corel.com
+flashscore.com
