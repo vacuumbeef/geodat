@@ -20,3 +20,4 @@ forum.kicad.info
 theverge.com
 corel.com
 flashscore.com
+pencil.dev
