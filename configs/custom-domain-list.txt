@@ -21,3 +21,4 @@ theverge.com
 corel.com
 flashscore.com
 pencil.dev
+framer.website
