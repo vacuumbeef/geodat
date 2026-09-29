@@ -23,6 +23,7 @@ pencil.dev
 framer.website
 airbnb.com
 belenka.ee
+belenka.com
 luxexpress.eu
 balticlivecam.com
 editor.pascal.app
