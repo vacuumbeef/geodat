@@ -56,3 +56,8 @@ lichendust.com
 abook-club.ru
 youtube.com
 m.youtube.com
+youtu.be
+googlevideo.com
+ytimg.com
+youtubei.googleapis.com
+youtube-nocookie.com
