@@ -61,3 +61,8 @@ googlevideo.com
 ytimg.com
 youtubei.googleapis.com
 youtube-nocookie.com
+gemini.google.com
+aistudio.google.com
+generativelanguage.googleapis.com
+ai.google.dev
+makersuite.google.com
