@@ -28,6 +28,7 @@ luxexpress.eu
 balticlivecam.com
 obsproject.com
 auth.obsproject.com
+api.obsproject.com
 editor.pascal.app
 timeanddate.com
 auti.sm
